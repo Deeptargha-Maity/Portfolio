@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ data.name }} | {{ data.title }}</title>
+  <meta name="description" content="{{ data.tagline }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor"      id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Particle Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Mountain SVG -->
+<svg class="mountains" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="mg1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f2415" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0a1a0e" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="mg2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a3d22" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#0f2415" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="mg3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2d6a3f" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#1a3d22" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 400 L0 260 L120 160 L240 210 L380 120 L520 180 L660 80 L800 140 L940 60 L1080 130 L1220 90 L1360 160 L1440 120 L1440 400 Z" fill="url(#mg1)"/>
+  <path d="M0 400 L0 310 L80 250 L200 280 L320 200 L460 240 L580 170 L700 210 L840 150 L960 190 L1100 130 L1240 180 L1360 220 L1440 190 L1440 400 Z" fill="url(#mg2)"/>
+  <path d="M0 400 L0 370 L60 340 L160 360 L280 310 L400 350 L520 290 L640 340 L760 300 L880 360 L1000 320 L1120 370 L1240 330 L1360 360 L1440 340 L1440 400 Z" fill="url(#mg3)"/>
+  <path d="M0 400 L0 388 L200 380 L400 392 L600 382 L800 394 L1000 384 L1200 393 L1440 385 L1440 400 Z" fill="#0a1a0e"/>
+</svg>
+
+<!-- ==================== NAV ==================== -->
+<nav>
+  <div class="nav-logo">DM</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#data-science">Data Science</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-eyebrow">// welcome to my portfolio</p>
+        <h1 class="hero-name">{{ data.name.split()[0] }}<br><span>{{ data.name.split()[1] }}</span></h1>
+        <p class="hero-title">{{ data.title }} &nbsp;·&nbsp; {{ data.subtitle }}</p>
+        <p class="hero-bio">{{ data.bio }}</p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn-primary">View Projects</a>
+          <a href="#contact"  class="btn-outline">Contact Me</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="avatar-ring">
+          <div class="avatar-inner">DM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABOUT ==================== -->
+<section id="about">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">01 // about</p>
+      <h2 class="section-title">Who I <span>Am</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>{{ data.bio }}</p>
+        <p style="margin-top:1rem;">{{ data.about_long }}</p>
+      </div>
+      <div class="about-stats">
+        {% for s in data.stats %}
+        <div class="stat-card">
+          <span class="stat-number"
+            {% if s.number|string|replace('+','')|int(-1) > -1 %}
+              data-count="{{ s.number|replace('+','') }}"
+              data-suffix="{{ '+' if '+' in s.number else '' }}"
+            {% endif %}>
+            {{ s.number }}
+          </span>
+          <span class="stat-label">{{ s.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== EDUCATION ==================== -->
+<section id="education">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">02 // education</p>
+      <h2 class="section-title">Academic <span>Journey</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline reveal">
+      {% for edu in data.education %}
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="glass-card">
+          <p class="timeline-year">{{ edu.year }}</p>
+          <p class="timeline-title">
+            {{ edu.degree }}
+            {% if edu.current %}<span class="badge-current">Current</span>{% endif %}
+          </p>
+          <p class="timeline-sub">{{ edu.school }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SKILLS ==================== -->
+<section id="skills">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">03 // skills</p>
+      <h2 class="section-title">Technical <span>Arsenal</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid reveal">
+      <!-- Programming -->
+      <div class="glass-card">
+        <p class="skills-group-title">Programming</p>
+        {% for sk in data.skills.programming %}
+        <div class="skill-row">
+          <p class="skill-name"><span>{{ sk.name }}</span><span>{{ sk.percent }}%</span></p>
+          <div class="skill-bar-bg">
+            <div class="skill-bar" data-width="{{ sk.percent }}"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- Data Science -->
+      <div class="glass-card">
+        <p class="skills-group-title">Data Science</p>
+        {% for sk in data.skills.data_science %}
+        <div class="skill-row">
+          <p class="skill-name"><span>{{ sk.name }}</span><span>{{ sk.percent }}%</span></p>
+          <div class="skill-bar-bg">
+            <div class="skill-bar" data-width="{{ sk.percent }}"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- Tools -->
+      <div class="glass-card">
+        <p class="skills-group-title">Tools &amp; Libraries</p>
+        <div class="tool-tags">
+          {% for tool in data.skills.tools %}
+          <span class="tool-tag">{{ tool }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECTS ==================== -->
+<section id="projects">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">04 // projects</p>
+      <h2 class="section-title">What I've <span>Built</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid reveal">
+      {% for p in data.projects %}
+      <div class="project-card">
+        <span class="project-number">{{ p.number }}</span>
+        <h3 class="project-title">{{ p.title }}</h3>
+        <p class="project-desc">{{ p.desc }}</p>
+        <div class="project-tags">
+          {% for tag in p.tags %}
+          <span class="project-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        <div class="project-links">
+          <a href="{{ p.github }}" class="project-link">GitHub ↗</a>
+          {% if p.demo %}
+          <a href="{{ p.demo }}" class="project-link">Live Demo ↗</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WHY DATA SCIENCE ==================== -->
+<section id="data-science">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">05 // passion</p>
+      <h2 class="section-title">Why <span>Data Science?</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="why-grid reveal">
+      <div>
+        <p class="why-text">Data Science interests me because it combines logic, programming, and real-world problem solving. I enjoy understanding patterns in data and using technology to turn raw information into meaningful insights.</p>
+        <p class="why-text" style="margin-top:1rem;">The intersection of math, code, and storytelling fascinates me — a single dataset can reveal truths that change decisions. That power is what draws me to this field every day.</p>
+        <p class="why-quote">"From code to insights — my journey in Data Science."</p>
+      </div>
+      <div class="why-pillars">
+        {% for pillar in data.pillars %}
+        <div class="pillar">
+          <div class="pillar-icon">{{ pillar.icon }}</div>
+          <p class="pillar-title">{{ pillar.title }}</p>
+          <p class="pillar-desc">{{ pillar.desc }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== JOURNEY ==================== -->
+<section id="journey">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">06 // journey</p>
+      <h2 class="section-title">Learning <span>Path</span></h2>
+      <div class="section-line"></div>
+      <p class="journey-tagline">"Learning every day, building for tomorrow."</p>
+    </div>
+    <div class="journey-items reveal">
+      {% for j in data.journey %}
+      <div class="journey-card">
+        <p class="journey-step">{{ j.step }}</p>
+        <p class="journey-title">{{ j.title }}</p>
+        <p class="journey-desc">{{ j.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">07 // contact</p>
+      <h2 class="section-title">Let's <span>Connect</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-grid reveal">
+      <form class="contact-form" id="contactForm">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" name="name" placeholder="Rahul Sharma" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" name="email" placeholder="hello@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" name="message" placeholder="Let's collaborate or just say hi..." required></textarea>
+        </div>
+        <div id="formSuccess" class="form-success"></div>
+        <div id="formError"   class="form-error"></div>
+        <button type="submit" class="btn-primary" id="submitBtn">Send Message</button>
+      </form>
+
+      <div class="contact-info">
+        <p class="contact-tagline">Have an idea? Want to <em>collaborate</em>? I'd love to hear from you.</p>
+        <p class="contact-sub">Whether it's a data project, a learning discussion, or just a friendly hello — reach out through any of these channels.</p>
+        <div class="social-links">
+          <a href="{{ data.socials.github }}" class="social-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.48 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.3.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.28-1.23 3.28-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.92 1.23 3.22 0 4.6-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          <a href="{{ data.socials.linkedin }}" class="social-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 .77 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="mailto:{{ data.socials.email }}" class="social-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+            Email
+          </a>
+          <a href="{{ data.socials.instagram }}" class="social-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85 0 3.2-.01 3.58-.07 4.85-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12c0-3.2.01-3.58.07-4.85C2.38 3.85 3.9 2.31 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.7.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24c3.26 0 3.67-.01 4.95-.07 4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32A6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <p>Designed by <span>{{ data.name }}</span> &nbsp;·&nbsp; Growing with code and data 🌿</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
