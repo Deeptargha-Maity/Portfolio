@@ -39,7 +39,7 @@ PORTFOLIO_DATA = {
         "tools": ["NumPy", "Pandas", "Matplotlib", "Seaborn", "Jupyter", "Google Colab", "Scikit-learn", "Excel", "Git", "VS Code"],
     },
     "projects": [
-        {"number": "01", "title": "Student Portfolio Website", "desc": "A personal portfolio with forest-mountain theme, smooth animations, and responsive design showcasing my journey.", "tags": ["HTML", "CSS", "Flask"], "github": "#", "demo": "#"},
+        {"number": "01", "title": "Student Portfolio Website", "desc": "A personal portfolio with forest-mountain theme, smooth animations, and responsive design showcasing my journey.", "tags": ["HTML", "CSS", "Flask"], "github": "https://github.com/Deeptargha-Maity/Portfolio", "demo": "#"},
         {"number": "02", "title": "Python Data Analysis", "desc": "Exploratory data analysis on a real-world dataset using Pandas and Matplotlib to uncover patterns and trends.", "tags": ["Python", "Pandas", "Matplotlib"], "github": "#", "demo": "#"},
         {"number": "03", "title": "Data Visualization Dashboard", "desc": "Interactive dashboard built with Seaborn and Matplotlib, visualizing student performance metrics.", "tags": ["Python", "Seaborn", "Jupyter"], "github": "#", "demo": "#"},
         {"number": "04", "title": "C++ Problem Solving", "desc": "Collection of algorithmic problems and solutions covering sorting, searching, and data structures.", "tags": ["C++", "DSA", "Algorithms"], "github": "#", "demo": None},
@@ -47,10 +47,10 @@ PORTFOLIO_DATA = {
         {"number": "06", "title": "CSV Data Cleaning Tool", "desc": "A Python utility to detect, flag, and fix common data quality issues in CSV files before analysis.", "tags": ["Python", "Pandas", "NumPy"], "github": "#", "demo": None},
     ],
     "pillars": [
-        {"icon": "📊", "title": "Data Analysis", "desc": "Finding patterns and meaning in raw datasets."},
-        {"icon": "🧠", "title": "Machine Learning", "desc": "Building models that learn and predict."},
-        {"icon": "📈", "title": "Visualization", "desc": "Turning numbers into stories people can see."},
-        {"icon": "💡", "title": "Problem Solving", "desc": "Using data to solve real-world challenges."},
+        {"icon": "", "title": "Data Analysis", "desc": "Finding patterns and meaning in raw datasets."},
+        {"icon": "", "title": "Machine Learning", "desc": "Building models that learn and predict."},
+        {"icon": "", "title": "Visualization", "desc": "Turning numbers into stories people can see."},
+        {"icon": "", "title": "Problem Solving", "desc": "Using data to solve real-world challenges."},
     ],
     "journey": [
         {"step": "STEP 01", "title": "Mastering Python", "desc": "Started with Python fundamentals, built up to data manipulation and scripting."},
@@ -61,10 +61,10 @@ PORTFOLIO_DATA = {
         {"step": "NEXT →", "title": "Deep ML & AI", "desc": "Currently diving into machine learning algorithms and advanced data workflows."},
     ],
     "socials": {
-        "github": "#",
-        "linkedin": "#",
+        "github": "https://github.com/Deeptargha-Maity",
+        "linkedin": "https://www.linkedin.com/in/deeptarghamaity",
         "email": "deeptargha@email.com",
-        "instagram": "#",
+        "instagram": "https://www.instagram.com/dptg.exec",
     }
 }
 
@@ -84,4 +84,7 @@ def contact():
     return jsonify({"success": True, "message": f"Thanks {name}! I'll get back to you soon."})
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    import os
+
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, threaded=True)
