@@ -63,7 +63,7 @@ PORTFOLIO_DATA = {
     "socials": {
         "github": "https://github.com/Deeptargha-Maity",
         "linkedin": "https://www.linkedin.com/in/deeptarghamaity",
-        "email": "deeptargha@email.com",
+        "email": "maitydeeptargha@email.com",
         "instagram": "https://www.instagram.com/dptg.exec",
     }
 }
